@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Име" />
+    <EditText android:id="@+id/etPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Телефон" android:inputType="phone" />
+    <EditText android:id="@+id/etEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Имейл" android:inputType="textEmailAddress" />
+    <EditText android:id="@+id/etAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Адрес" />
+    <EditText android:id="@+id/etPhotoUrl" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Photo URL (опционално)" />
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp">
+        <ImageView android:id="@+id/ivPreview" android:layout_width="60dp" android:layout_height="60dp" android:scaleType="centerCrop" android:src="@android:drawable/ic_menu_gallery" android:background="#CCCCCC"/>
+        <Button android:id="@+id/btnPick" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Снимка" android:layout_marginStart="8dp"/>
+        <Button android:id="@+id/btnAdd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Добави" android:layout_marginStart="8dp" android:enabled="false"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvContacts" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="16dp" />
+</LinearLayout>
