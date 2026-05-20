@@ -15,6 +15,7 @@
         <ImageView android:id="@+id/ivPreview" android:layout_width="60dp" android:layout_height="60dp" android:scaleType="centerCrop" android:src="@android:drawable/ic_menu_gallery" android:background="#CCCCCC"/>
         <Button android:id="@+id/btnPick" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Снимка" android:layout_marginStart="8dp"/>
         <Button android:id="@+id/btnAdd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Добави" android:layout_marginStart="8dp" android:enabled="false"/>
+        <Button android:id="@+id/btnScanQr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="QR" android:layout_marginStart="8dp" android:backgroundTint="#2196F3" android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvContacts" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="16dp" />

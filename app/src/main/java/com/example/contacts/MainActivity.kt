@@ -11,6 +11,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +20,14 @@ class MainActivity : AppCompatActivity() {
     private val vm: ContactViewModel by viewModels()
     private lateinit var photoRepo: PhotoRepository
     private var pickedPhotoPath: String? = null
+
+    private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
+        if (result.contents == null) {
+            Toast.makeText(this, "Сканирането е отменено", Toast.LENGTH_LONG).show()
+        } else {
+            parseAndSaveVCard(result.contents)
+        }
+    }
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -54,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         val etPhone = findViewById<EditText>(R.id.etPhone)
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val btnAdd = findViewById<Button>(R.id.btnAdd)
+        val btnScanQr = findViewById<Button>(R.id.btnScanQr)
 
         etEmail.addTextChangedListener { validate(etEmail, etPhone, btnAdd) }
         etPhone.addTextChangedListener { validate(etEmail, etPhone, btnAdd) }
@@ -76,6 +87,56 @@ class MainActivity : AppCompatActivity() {
             etEmail.text.clear()
             pickedPhotoPath = null
             findViewById<ImageView>(R.id.ivPreview).setImageResource(android.R.drawable.ic_menu_gallery)
+        }
+
+        btnScanQr.setOnClickListener {
+            val options = ScanOptions()
+            options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            options.setPrompt("Сканирайте vCard QR код")
+            options.setCameraId(0)
+            options.setBeepEnabled(true)
+            options.setBarcodeImageEnabled(true)
+            barcodeLauncher.launch(options)
+        }
+    }
+
+    private fun parseAndSaveVCard(vcfData: String) {
+        try {
+            var name = ""
+            var phone = ""
+            var email = ""
+            var address = ""
+
+            val lines = vcfData.split("\n")
+            for (line in lines) {
+                val trimmed = line.trim()
+                when {
+                    trimmed.startsWith("FN:") -> name = trimmed.substring(3)
+                    trimmed.startsWith("TEL:") -> phone = trimmed.substring(4)
+                    trimmed.startsWith("EMAIL:") -> email = trimmed.substring(6)
+                    trimmed.startsWith("ADR:") -> {
+                        // ADR:;;Street;City;State;Zip;Country -> почистваме точките и запетаите
+                        address = trimmed.substring(4).replace(";", " ").trim()
+                    }
+                }
+            }
+
+            if (name.isNotEmpty() && phone.isNotEmpty()) {
+                val contact = Contact(
+                    name = name,
+                    phone = phone,
+                    email = email,
+                    address = address,
+                    photoUrl = "",
+                    photoPath = ""
+                )
+                vm.addContact(contact)
+                Toast.makeText(this, "Контактът $name е импортиран!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Невалиден vCard формат", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Грешка при импортиране: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 

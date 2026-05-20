@@ -39,6 +39,11 @@
             android:name=".UpdateDeleteActivity"
             android:exported="false" />
         <activity
+            android:name=".QRCodeActivity"
+            android:exported="false"
+            android:label="QR Код на Контакта"
+            android:parentActivityName=".UpdateDeleteActivity" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>

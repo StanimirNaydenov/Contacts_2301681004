@@ -55,4 +55,13 @@
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnShowQr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Сподели чрез QR Код"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white" />
+
 </LinearLayout>

@@ -37,6 +37,7 @@ class UpdateDeleteActivity : AppCompatActivity() {
         val btnUpdate = findViewById<Button>(R.id.btnUpdate)
         val btnDelete = findViewById<Button>(R.id.btnDelete)
         val btnMaps = findViewById<Button>(R.id.btnMaps)
+        val btnShowQr = findViewById<Button>(R.id.btnShowQr)
 
 
         // Зареждане на данните на контакта асинхронно
@@ -54,6 +55,27 @@ class UpdateDeleteActivity : AppCompatActivity() {
                     else -> android.R.drawable.sym_def_app_icon
                 }
                 ivPhoto.load(source) { crossfade(true) }
+            }
+        }
+
+        btnShowQr.setOnClickListener {
+            currentContact?.let { contact ->
+                // Генериране на стринг във формат vCard (VCF) 3.0
+                val vcfData = """
+                    BEGIN:VCARD
+                    VERSION:3.0
+                    FN:${contact.name}
+                    TEL:${contact.phone}
+                    EMAIL:${contact.email}
+                    ADR:;;${contact.address};;;;
+                    END:VCARD
+                """.trimIndent()
+                val intent = Intent(this, QRCodeActivity::class.java)
+                intent.putExtra("VCF_DATA", vcfData)
+                intent.putExtra("CONTACT_NAME", contact.name)
+                startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, "Данните за контакта не са заредени", Toast.LENGTH_SHORT).show()
             }
         }
 
