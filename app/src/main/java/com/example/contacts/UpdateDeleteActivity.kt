@@ -58,12 +58,32 @@ class UpdateDeleteActivity : AppCompatActivity() {
         }
 
         btnUpdate.setOnClickListener {
+            val name = etName.text.toString().trim()
+            val phone = etPhone.text.toString().trim()
+            val email = etEmail.text.toString().trim()
+            val address = etAddress.text.toString().trim()
+
+            if (name.isEmpty()) {
+                etName.error = "Името е задължително"
+                return@setOnClickListener
+            }
+
+            if (!android.util.Patterns.PHONE.matcher(phone).matches()) {
+                etPhone.error = "Невалиден телефонен номер"
+                return@setOnClickListener
+            }
+
+            if (email.isNotEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                etEmail.error = "Невалиден e-mail адрес"
+                return@setOnClickListener
+            }
+
             currentContact?.let { contact ->
                 val updatedContact = contact.copy(
-                    name = etName.text.toString(),
-                    phone = etPhone.text.toString(),
-                    email = etEmail.text.toString(),
-                    address = etAddress.text.toString()
+                    name = name,
+                    phone = phone,
+                    email = email,
+                    address = address
                 )
                 vm.updateContact(updatedContact)
                 Toast.makeText(this, "Контактът е обновен", Toast.LENGTH_SHORT).show()
