@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -44,4 +45,8 @@ dependencies {
     implementation libs.coil.kt
     implementation libs.zxing.core
     implementation libs.zxing.android.embedded
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.firestore
+    implementation libs.firebase.analytics
+    implementation libs.kotlinx.coroutines.play.services
 }
